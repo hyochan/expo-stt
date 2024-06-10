@@ -6,8 +6,7 @@ export type OnSpeechErrorEventPayload = {
 };
 export enum ReactEvents {
   onSpeechStart = "onSpeechStart",
+  onSpeechResult = "onSpeechResult",
   onSpeechEnd = "onSpeechEnd",
   onSpeechError = "onSpeechError",
-  onSpeechResult = "onSpeechResult",
-  onSpeechCancelled = "onSpeechCancelled",
 }
