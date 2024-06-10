@@ -1,25 +1,13 @@
 # expo-stt
 
-Unofficial Speech To Text module for Expo which supported iOS and Android
+- Unofficial Speech To Text module for Expo which supported iOS and Android
+- Forked [anhtuank7c/expo-stt](https://github.com/anhtuank7c/expo-stt)
+- Migrated [react-native-voice functionality](https://github.com/react-native-voice/voice) on [anhtuank7c/expo-stt](https://github.com/anhtuank7c/expo-stt)
+- 현재 expo-stt는 구글 음성인식 모달이 따로 떠. 이 대신, react-native-voice처럼 내장 마이크 쓰려고 expo module로 만들어진 expo-stt 위에 react-native-voice 코드를 migrate 했어.
 
-So sorry that I am unemployed and don't have much money to spend more time to make this module work also for web.
-
-If you still want to support web platform, please follow this article https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API
+# Demo
 
 ![Demo speech to text](demo.png "Demo Speech To Text")
-
-# API documentation
-
-- [Documentation for the main branch](https://github.com/expo/expo/blob/main/docs/pages/versions/unversioned/sdk/stt.md)
-- [Documentation for the latest stable release](https://docs.expo.dev/versions/latest/sdk/stt/)
-
-# Installation in managed Expo projects
-
-For [managed](https://docs.expo.dev/versions/latest/introduction/managed-vs-bare/) Expo projects, please follow the installation instructions in the [API documentation for the latest stable release](#api-documentation). If you follow the link and there is no documentation available then this library is not yet usable within managed projects &mdash; it is likely to be included in an upcoming Expo SDK release.
-
-# Installation in bare React Native projects
-
-For bare React Native projects, you must ensure that you have [installed and configured the `expo` package](https://docs.expo.dev/bare/installing-expo-modules/) before continuing.
 
 ### Add the package to your npm dependencies
 
@@ -39,6 +27,7 @@ npx expo prebuild --clean
 ### Configure for iOS (Bare React Native project only)
 
 Run `npx pod-install` after installing the npm package.
+
 ## Add missing permissions for iOS
 
 Add following key to plugins of `app.json` in Expo project
@@ -68,6 +57,7 @@ For Bare React Native project, you need to add these key to `Info.plist` in `ios
 ## Usage
 
 Register some listeners
+
 ```
   import * as ExpoStt from 'expo-stt';
 
@@ -82,10 +72,6 @@ Register some listeners
       setSpokenText(value.join());
     });
 
-    const onSpeechCancelled = ExpoStt.addOnSpeechCancelledListener(() => {
-      setRecognizing(false);
-    });
-
     const onSpeechError = ExpoStt.addOnSpeechErrorListener(({ cause }) => {
       setError(cause);
       setRecognizing(false);
@@ -98,7 +84,6 @@ Register some listeners
     return () => {
       onSpeechStart.remove();
       onSpeechResult.remove();
-      onSpeechCancelled.remove();
       onSpeechError.remove();
       onSpeechEnd.remove();
     };
@@ -107,21 +92,14 @@ Register some listeners
 
 There are some functions available to call such as:
 
-* ExpoStt.startSpeech()
-* ExpoStt.stopSpeech()
-* ExpoStt.cancelSpeech()
-* ExpoStt.destroySpeech()
-* ExpoStt.requestRecognitionPermission()
-* ExpoStt.checkRecognitionPermission()
+- ExpoStt.startSpeech()
+- ExpoStt.stopSpeech()
+- ExpoStt.destroySpeech()
+- ExpoStt.requestRecognitionPermission()
+- ExpoStt.checkRecognitionPermission()
 
 Take a look into `example/App.tsx` for completed example
 
 # Contributing
 
-Contributions are very welcome! Please refer to guidelines described in the [contributing guide]( https://github.com/expo/expo#contributing).
-
-## Author
-
-I am looking for a job as a React native developer, remote work is preferred.
-
-Check out my CV: https://anhtuank7c.github.io
+Contributions are very welcome! Please refer to guidelines described in the [contributing guide](https://github.com/expo/expo#contributing).
