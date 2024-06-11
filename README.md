@@ -2,8 +2,46 @@
 
 - Unofficial Speech To Text module for Expo which supported iOS and Android
 - Forked [anhtuank7c/expo-stt](https://github.com/anhtuank7c/expo-stt)
-- Migrated [react-native-voice functionality](https://github.com/react-native-voice/voice) on [anhtuank7c/expo-stt](https://github.com/anhtuank7c/expo-stt)
-- 현재 expo-stt는 구글 음성인식 모달이 따로 떠. 이 대신, react-native-voice처럼 내장 마이크 쓰려고 expo module로 만들어진 expo-stt 위에 react-native-voice 코드를 migrate 했어.
+- Migrated [react-native-voice functionality](https://github.com/react-native-voice/voice) on [crossplatformkorea/expo-stt](https://github.com/crossplatformkorea/expo-stt), which is forked from [anhtuank7c/expo-stt](https://github.com/anhtuank7c/expo-stt)
+- Currently, [anhtuank7c/expo-stt](https://github.com/anhtuank7c/expo-stt) has a separate Google voice recognition modal. Instead, I migrated the [react-native-voice](https://github.com/react-native-voice/voice) code onto [crossplatformkorea/expo-stt](https://github.com/crossplatformkorea/expo-stt), which was created with the [expo module](https://docs.expo.dev/modules/overview), to use the built-in microphone like [react-native-voice](https://github.com/react-native-voice/voice).
+
+# Sequence Diagram
+
+Below is a sequence diagram explaining how each module, including SpeechRecognizer, works.
+
+![Sequence Diagram](sequence-diagram.png)
+
+And below is the [mermaid](https://mermaid.js.org) code to create the above diagram.
+
+```mermaid
+
+sequenceDiagram
+    participant User
+    participant ExpoSttModule
+    participant SpeechRecognizer
+    participant ReactNative as React Native Module
+
+    User->>ExpoSttModule: startSpeech()
+    ExpoSttModule->>SpeechRecognizer: createSpeechRecognizer()
+    ExpoSttModule->>SpeechRecognizer: startListening()
+    SpeechRecognizer-->>ExpoSttModule: onReadyForSpeech
+
+    User->>SpeechRecognizer: User starts speaking
+    SpeechRecognizer-->>ExpoSttModule: onBeginningOfSpeech
+    ExpoSttModule->>ReactNative: sendEvent(onSpeechStart)
+
+    User->>SpeechRecognizer: User finishes speaking
+    SpeechRecognizer-->>ExpoSttModule: onEndOfSpeech
+    ExpoSttModule->>ReactNative: sendEvent(onSpeechEnd)
+
+    SpeechRecognizer-->>ExpoSttModule: onResults
+    ExpoSttModule->>ReactNative: sendEvent(onSpeechResult)
+
+    alt SpeechRecognizer encounters an error
+        SpeechRecognizer-->>ExpoSttModule: onError
+        ExpoSttModule->>ReactNative: sendEvent(onSpeechError)
+    end
+```
 
 # Demo
 
