@@ -85,6 +85,8 @@ class ExpoSttModule : Module(), RecognitionListener {
             }
             isRecognizing = false
             // Log.d(TAG, "Stop Voice Recognizer")
+
+            return@Function null as Any
         }
 
         Function("destroySpeech") {
@@ -93,6 +95,8 @@ class ExpoSttModule : Module(), RecognitionListener {
             }
             isRecognizing = false
             // Log.d(TAG, "Destroy Voice Recognizer")
+
+            return@Function null as Any
         }
 
         Events(onSpeechStart, onSpeechResult, onPartialResults, onSpeechEnd, onSpeechError)
