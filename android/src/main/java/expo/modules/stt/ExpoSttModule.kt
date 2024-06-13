@@ -20,7 +20,7 @@ import androidx.core.content.ContextCompat
 
 class ExpoSttModule : Module(), RecognitionListener {
     private var isRecognizing: Boolean = false
-    private var speech: SpeechRecognizer? = null;
+    private var speech: SpeechRecognizer? = null
 
     companion object {
         const val onSpeechStart = "onSpeechStart"
@@ -59,17 +59,17 @@ class ExpoSttModule : Module(), RecognitionListener {
             }
         
             if (speech != null) {
-                speech?.destroy();
-                speech = null;
+                speech?.destroy()
+                speech = null
             }
             
             CoroutineScope(Dispatchers.Main).launch {
                 speech = SpeechRecognizer.createSpeechRecognizer(appContext.reactContext)
-                speech?.setRecognitionListener(this@ExpoSttModule);
+                speech?.setRecognitionListener(this@ExpoSttModule)
                 val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
 
-                speech?.startListening(intent);
+                speech?.startListening(intent)
             }
             return@Function true
         }
@@ -81,18 +81,18 @@ class ExpoSttModule : Module(), RecognitionListener {
          */
         Function("stopSpeech") {
             if (speech != null) {
-                speech?.stopListening();
+                speech?.stopListening()
             }
-            isRecognizing = false;
-            Log.d(TAG, "Stop Voice Recognizer")
+            isRecognizing = false
+            // Log.d(TAG, "Stop Voice Recognizer")
         }
 
         Function("destroySpeech") {
             if (speech != null) {
-                speech?.destroy();
+                speech?.destroy()
             }
-            isRecognizing = false;
-            Log.d(TAG, "Destroy Voice Recognizer")
+            isRecognizing = false
+            // Log.d(TAG, "Destroy Voice Recognizer")
         }
 
         Events(onSpeechStart, onSpeechResult, onPartialResults, onSpeechEnd, onSpeechError)
@@ -122,31 +122,31 @@ class ExpoSttModule : Module(), RecognitionListener {
     }
 
     override fun onReadyForSpeech(params: Bundle?) {
-        Log.d(TAG, "onReadyForSpeech")
+        // Log.d(TAG, "onReadyForSpeech")
     }
 
     override fun onBeginningOfSpeech() {
         isRecognizing = true
         sendEvent(onSpeechStart)
-        Log.d(TAG, "onBeginningOfSpeech")
+        // Log.d(TAG, "onBeginningOfSpeech")
     }
 
     override fun onResults(results: Bundle?) {
         isRecognizing = false
-         val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+        val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
         sendEvent(onSpeechResult, mapOf("results" to matches))
-        Log.d(TAG, "onResults $matches")
+        // Log.d(TAG, "onResults $matches")
     }
 
     override fun onPartialResults(partialResults: Bundle?) {
         val matches = partialResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-        Log.d(TAG, "onPartialResults $matches")
+        // Log.d(TAG, "onPartialResults $matches")
     }
 
     override fun onEndOfSpeech() {
         isRecognizing = false
         sendEvent(onSpeechEnd)
-        Log.d(TAG, "onEndOfSpeech")
+        // Log.d(TAG, "onEndOfSpeech")
     }
 
     override fun onError(error: Int) {
@@ -165,18 +165,18 @@ class ExpoSttModule : Module(), RecognitionListener {
         }
         
         sendEvent(onSpeechError, mapOf("errorMessage" to errorMessage))
-        Log.d(TAG, "onError: $error $errorMessage")
+        // Log.d(TAG, "onError: $error $errorMessage")
     }
 
     override fun onBufferReceived(buffer: ByteArray?) {
-        Log.d(TAG, "onBufferReceived")
+        // Log.d(TAG, "onBufferReceived")
     }
 
     override fun onRmsChanged(rmsdB: Float) {
-       Log.d(TAG, "onRmsChanged: $rmsdB")
+    //    Log.d(TAG, "onRmsChanged: $rmsdB")
     }
 
     override fun onEvent(eventType: Int, params: Bundle?) {
-        Log.d(TAG, "onEvent: $eventType")
+        // Log.d(TAG, "onEvent: $eventType")
     }
 }
