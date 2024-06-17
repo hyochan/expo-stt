@@ -34,6 +34,8 @@ class ExpoSttModule : Module(), RecognitionListener {
     override fun definition() = ModuleDefinition {
         Name(TAG)
 
+        Events(onSpeechStart, onSpeechResult, onPartialResults, onSpeechEnd, onSpeechError)
+
         AsyncFunction("requestRecognitionPermission") {
             requestRecognitionPermission()
         }
@@ -84,7 +86,7 @@ class ExpoSttModule : Module(), RecognitionListener {
                 speech?.stopListening()
             }
             isRecognizing = false
-            // Log.d(TAG, "Stop Voice Recognizer")
+            Log.d(TAG, "Stop Voice Recognizer")
 
             return@Function null as Any
         }
@@ -94,12 +96,11 @@ class ExpoSttModule : Module(), RecognitionListener {
                 speech?.destroy()
             }
             isRecognizing = false
-            // Log.d(TAG, "Destroy Voice Recognizer")
+            Log.d(TAG, "Destroy Voice Recognizer")
 
             return@Function null as Any
         }
 
-        Events(onSpeechStart, onSpeechResult, onPartialResults, onSpeechEnd, onSpeechError)
     }
 
     private fun requestRecognitionPermission() {
@@ -126,20 +127,20 @@ class ExpoSttModule : Module(), RecognitionListener {
     }
 
     override fun onReadyForSpeech(params: Bundle?) {
-        // Log.d(TAG, "onReadyForSpeech")
+        Log.d(TAG, "onReadyForSpeech")
     }
 
     override fun onBeginningOfSpeech() {
         isRecognizing = true
         sendEvent(onSpeechStart)
-        // Log.d(TAG, "onBeginningOfSpeech")
+        Log.d(TAG, "onBeginningOfSpeech")
     }
 
     override fun onResults(results: Bundle?) {
         isRecognizing = false
         val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
         sendEvent(onSpeechResult, mapOf("results" to matches))
-        // Log.d(TAG, "onResults $matches")
+        Log.d(TAG, "onResults $matches")
     }
 
     override fun onPartialResults(partialResults: Bundle?) {
@@ -150,7 +151,7 @@ class ExpoSttModule : Module(), RecognitionListener {
     override fun onEndOfSpeech() {
         isRecognizing = false
         sendEvent(onSpeechEnd)
-        // Log.d(TAG, "onEndOfSpeech")
+        Log.d(TAG, "onEndOfSpeech")
     }
 
     override fun onError(error: Int) {
@@ -169,11 +170,11 @@ class ExpoSttModule : Module(), RecognitionListener {
         }
         
         sendEvent(onSpeechError, mapOf("errorMessage" to errorMessage))
-        // Log.d(TAG, "onError: $error $errorMessage")
+        Log.d(TAG, "onError: $error $errorMessage")
     }
 
     override fun onBufferReceived(buffer: ByteArray?) {
-        // Log.d(TAG, "onBufferReceived")
+        Log.d(TAG, "onBufferReceived")
     }
 
     override fun onRmsChanged(rmsdB: Float) {
@@ -181,6 +182,6 @@ class ExpoSttModule : Module(), RecognitionListener {
     }
 
     override fun onEvent(eventType: Int, params: Bundle?) {
-        // Log.d(TAG, "onEvent: $eventType")
+        Log.d(TAG, "onEvent: $eventType")
     }
 }
