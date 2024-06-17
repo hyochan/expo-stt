@@ -1,2 +1,8 @@
-<manifest package="expo.modules.stt">
+<manifest 
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  package="expo.modules.stt"
+  xmlns:tools="http://schemas.android.com/tools">
+    <uses-sdk tools:overrideLibrary="com.facebook.react" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
