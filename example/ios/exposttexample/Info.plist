@@ -42,6 +42,10 @@
       <key>NSAllowsLocalNetworking</key>
       <true/>
     </dict>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Hi2</string>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>Hi</string>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>
@@ -68,5 +72,9 @@
     <string>Light</string>
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false/>
+    <key>microphonePermission</key>
+    <string>Allow $(PRODUCT_NAME) to access your microphone</string>
+    <key>speechRecognitionPermission</key>
+    <string>Allow $(PRODUCT_NAME) to access your speech recognition</string>
   </dict>
 </plist>
