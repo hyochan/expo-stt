@@ -7,18 +7,36 @@ enum AuthorizationStatus {
     case notDetermined, denied, restricted, authorized
 }
 public class ExpoSttModule: Module {
-    private var averagePowerForChannel0: Float?
-    private var averagePowerForChannel1: Float?
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
-    private var recognitionTask: SFSpeechRecognitionTask?
+    private var recognitionTask: SFSpeechRecognitionTask? // A task object for monitoring the speech recognition progress.
     private var audioEngine: AVAudioEngine?
     private var audioSession: AVAudioSession?
-    private var speechRecognizer: SFSpeechRecognizer?
+    private var speechRecognizer: SFSpeechRecognizer? // An object you use to check for the availability of the speech recognition service, and to initiate the speech recognition process.
     private var sessionId: String?
     private var priorAudioCategory: AVAudioSession.Category?
     private var priorAudioCategoryOptions: AVAudioSession.CategoryOptions?
     private var isTearingDown: Bool = false
     private var continuous: Bool = false
+
+    private var silenceTimer: Timer?
+    private let silenceTimeout: TimeInterval = 5.0 // 5 seconds of silence before stopping
+
+    private func startSilenceTimer() {
+        silenceTimer = Timer.scheduledTimer(withTimeInterval: silenceTimeout, repeats: false) { [weak self] _ in
+            self?.handleSilenceTimeout()
+        }
+    }
+
+    private func resetSilenceTimer() {
+        silenceTimer?.invalidate()
+        startSilenceTimer()
+    }
+
+    private func handleSilenceTimeout() {
+        recognitionTask?.finish()
+        sendEvent(ReactEvents.onSpeechEnd.rawValue)
+        teardown()
+    }
     
     private func teardown() {
         isTearingDown = true
@@ -177,6 +195,9 @@ public class ExpoSttModule: Module {
                 if !self.continuous {
                     self.teardown()
                 }
+            } else {
+                // Reset the silence timer if partial results are returned
+                self.resetSilenceTimer()
             }
         })
         
@@ -191,6 +212,7 @@ public class ExpoSttModule: Module {
         audioEngine?.connect(inputNode!, to: mixer, format: recordingFormat)
         audioEngine?.prepare()
         try audioEngine?.start()
+        startSilenceTimer()
     }
 
   public func definition() -> ModuleDefinition {

@@ -50,10 +50,6 @@ export default function App() {
       setSpokenText(value.join());
     });
 
-    const onSpeechCancelled = ExpoStt.addOnSpeechCancelledListener(() => {
-      setRecognizing(false);
-    });
-
     const onSpeechError = ExpoStt.addOnSpeechErrorListener(({ cause }) => {
       setError(cause);
       setRecognizing(false);
@@ -66,7 +62,6 @@ export default function App() {
     return () => {
       onSpeechStart.remove();
       onSpeechResult.remove();
-      onSpeechCancelled.remove();
       onSpeechError.remove();
       onSpeechEnd.remove();
     };
@@ -94,12 +89,6 @@ export default function App() {
         preset="warning"
         title="Stop speech"
         onPress={() => ExpoStt.stopSpeech()}
-      />
-      <Button
-        disabled={!recognizing}
-        preset="warning"
-        title="cancel speech"
-        onPress={() => ExpoStt.cancelSpeech()}
       />
       <Button
         disabled={!recognizing}

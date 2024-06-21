@@ -29,6 +29,7 @@ project.xcworkspace
 
 # Android/IJ
 #
+build/
 .classpath
 .cxx
 .gradle
